@@ -118,7 +118,7 @@ npm run type-check
 ### To Update SEO
 
 Edit `index.html` and replace:
-- `https://www.thehoksclub.com/` with your actual domain
+- `https://www.thehoks.com/` with your actual domain
 - Social media links in structured data
 - OG images with your actual image URLs
 
@@ -189,7 +189,7 @@ House of Kanakkars Private Limited
 
 -  Email: thehoks01@gmail.com
 -  Phone: +91 8807974452
--  Website: [www.thehoksclub.com](#)
+-  Website: [www.thehoks.com](#)
 -  LinkedIn: [The HOKS Club](#)
 -  Instagram: [@thehoksclub](#)
 
