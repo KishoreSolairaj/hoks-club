@@ -306,3 +306,9 @@ img{max-width:100%}
 .feed.single .reel b{font-size:.8rem}
 .yt .reel svg{width:56px;height:56px}
 .yt .reel b{font-size:.8rem}
+.photo.has-img::after{display:none}
+.hero-photos .photo.wide:first-child{--ar:4/3}
+.date.soon{padding:9px 0}
+.date.soon b{font-size:1.2rem;font-style:italic;color:var(--brass-hi)}
+.date.soon span{font-size:.52rem;letter-spacing:.1em}
+.course .photo.has-img{--ar:16/9}

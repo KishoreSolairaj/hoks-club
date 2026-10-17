@@ -2,6 +2,15 @@ import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import reel10 from './assets/reels/reel-10.jpg';
 import yt16 from './assets/youtube/yt-16.jpg';
+import photo1 from './assets/photos/photo-1.jpg';
+import photo2 from './assets/photos/photo-2.jpg';
+import photo3 from './assets/photos/photo-3.jpg';
+import photo4 from './assets/photos/photo-4.jpg';
+import photo5 from './assets/photos/photo-5.jpg';
+import photo6 from './assets/photos/photo-6.jpg';
+import photo7 from './assets/photos/photo-7.jpg';
+import photo8 from './assets/photos/photo-8.jpg';
+import photo9 from './assets/photos/photo-9.jpg';
 import { track } from './analytics';
 
 // Captions for the numbered photo frames. Replace a frame with a real photo by
@@ -24,6 +33,10 @@ const PHOTOS: Record<number, string> = {
 
 const LOGO = `${import.meta.env.BASE_URL}logo.jpg`;
 
+// "Moments from HOKS" gallery and numbers: hidden until real photos and figures
+// are ready. Set to true to show the section again.
+const SHOW_GALLERY = false;
+
 // Instagram reels shown in the feed tiles, keyed by photo number.
 const REELS: Record<number, { url: string; thumb?: string; title: string }> = {
   10: { url: 'https://www.instagram.com/reel/DaFnivDvtaC/', thumb: reel10, title: 'The Trap: fake claims today, heavy penalties tomorrow' },
@@ -45,14 +58,17 @@ interface PhotoProps {
   className?: string;
   style?: CSSProperties;
   src?: string;
+  alt?: string;
+  // CSS object-position, to keep the important part of the photo in the crop.
+  position?: string;
 }
 
-const Photo = ({ n, className = '', style, src }: PhotoProps) => {
+const Photo = ({ n, className = '', style, src, alt, position }: PhotoProps) => {
   const cap = PHOTOS[n] ?? '';
   return (
-    <figure className={`photo ${className}`.trim()} style={style} aria-label={src ? undefined : `Photo ${n} placeholder: ${cap}`}>
+    <figure className={`photo ${src ? 'has-img ' : ''}${className}`.trim()} style={style} aria-label={src ? undefined : `Photo ${n} placeholder: ${cap}`}>
       {src ? (
-        <img src={src} alt={cap} />
+        <img src={src} alt={alt ?? cap} style={position ? { objectPosition: position } : undefined} />
       ) : (
         <div className="in">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.6" /></svg>
@@ -111,8 +127,8 @@ const Hero = () => (
         </div>
       </div>
       <div className="hero-photos">
-        <Photo n={1} />
-        <Photo n={2} className="small" />
+        <Photo n={1} src={photo1} className="wide" position="35% 50%" alt="A HOKS session in a packed college hall: the speaker at the podium addresses rows of students" />
+        <Photo n={2} className="small" src={photo2} position="50% 40%" alt="Portrait of the HOKS speaker" />
       </div>
     </div>
   </section>
@@ -158,12 +174,12 @@ const Launchpad = () => (
       </div>
       <div className="lp">
         <div className="lp-side">
-          <Photo n={3} />
+          <Photo n={3} src={photo3} style={ar('1672/940')} alt="HOKS Launchpad: from idea to investment. Build your business with expert guidance through six stages: ideation, validation, business planning, setup, launch and marketing, and fundraising." />
           <div className="facts">
             <div><span>Format</span><b>Weekend workshop or 6-week cohort</b></div>
             <div><span>Mode</span><b>In person and online</b></div>
-            <div><span>Next batch</span><b className="ph">DD Month 2027</b></div>
-            <div><span>Fee</span><b className="ph">₹ ____</b></div>
+            <div><span>Next batch</span><b>Coming soon</b></div>
+            <div><span>Fee</span><b>₹ XXX.XX</b></div>
           </div>
           <a className="btn btn-brass" href="#contact" style={{ justifySelf: 'start' }}>Reserve your seat <Arr /></a>
         </div>
@@ -235,13 +251,13 @@ const Events = () => (
           </div>
         </div>
         <div>
-          <Photo n={4} />
+          <Photo n={4} src={photo4} style={ar('1672/941')} alt="HOKS Connect networking event: founders and professionals talking in small groups, with a screen reading 'Your network is your net worth'" />
           <ul className="upcoming" aria-label="Upcoming events">
             {['Founder Meetup', 'Investor Evening', 'Pitch Night'].map(title => (
               <li key={title}>
-                <div className="date"><b className="ph">__</b><span className="ph">Mon</span></div>
-                <div><h4>{title}</h4><p className="ph">City · Venue</p></div>
-                <a href="#contact">Register →</a>
+                <div className="date soon"><b>Soon</b><span>Date TBA</span></div>
+                <div><h4>{title}</h4><p>Coming soon · Venue to be announced</p></div>
+                <a href="#contact">Notify me →</a>
               </li>
             ))}
           </ul>
@@ -261,10 +277,11 @@ const Events = () => (
           </ul>
         </div>
         <div>
-          <div className="price"><span className="ph">₹ ____</span> <small>/ year</small></div>
+          {/* Membership fee hidden until it's decided:
+          <div className="price"><span className="ph">₹ ____</span> <small>/ year</small></div> */}
           <p style={{ color: 'var(--muted)' }}>Open to founders, aspiring entrepreneurs and professionals who want to build.</p>
           <a className="btn btn-brass" href="#contact" style={{ justifySelf: 'start' }}>Become a member <Arr /></a>
-          <Photo n={5} style={ar('16/10', { marginTop: 8 })} />
+          <Photo n={5} src={photo5} style={ar('1672/941', { marginTop: 8 })} alt="HOKS Founders Network members in discussion at a HOKS Connect event, with the HOKS Academy wall behind them" />
         </div>
       </div>
     </div>
@@ -272,10 +289,10 @@ const Events = () => (
 );
 
 const COURSES = [
-  [6, 'Idea to Business', 'Find, test and shape an idea into a business people will pay for.'],
-  [7, 'Business Setup Explained', 'Structures, registrations and compliance in plain language.'],
-  [8, 'Marketing & Sales', 'Win customers with social media, branding and simple sales systems.'],
-  [9, 'Fundraising Fundamentals', 'Grants, angels and VCs, plus how to build a pitch deck that gets read.'],
+  [6, 'Idea to Business', 'Find, test and shape an idea into a business people will pay for.', photo6],
+  [7, 'Business Setup Explained', 'Structures, registrations and compliance in plain language.', photo7],
+  [8, 'Marketing & Sales', 'Win customers with social media, branding and simple sales systems.', photo8],
+  [9, 'Fundraising Fundamentals', 'Grants, angels and VCs, plus how to build a pitch deck that gets read.', photo9],
 ] as const;
 
 const Online = () => (
@@ -287,12 +304,13 @@ const Online = () => (
         <p className="lede">Self-paced video courses with worksheets, templates and live doubt-clearing sessions. Built for busy founders and future entrepreneurs.</p>
       </div>
       <div className="courses">
-        {COURSES.map(([n, title, desc]) => (
+        {COURSES.map(([n, title, desc, cover]) => (
           <article className="course" key={title}>
-            <Photo n={n} />
+            <Photo n={n} src={cover} alt={`HOKS online course cover: ${title}. ${desc}`} />
             <h4>{title}</h4>
             <p>{desc}</p>
-            <div className="meta"><span>Self-paced</span><span className="ph">₹ ____</span></div>
+            {/* Course format and price hidden for now:
+            <div className="meta"><span>Self-paced</span><span className="ph">₹ ____</span></div> */}
           </article>
         ))}
       </div>
@@ -373,7 +391,7 @@ const Colleges = () => (
           <ul><li>Budgeting and saving</li><li>Investing basics: SIPs, funds, stocks</li><li>Credit, tax basics and avoiding scams</li></ul></article>
       </div>
       <div className="cw-foot">
-        <Photo n={19} style={ar('16/9')} />
+        <Photo n={19} src={photo1} style={ar('16/9')} position="35% 50%" alt="A HOKS college workshop: students fill the hall as the speaker presents from the podium" />
         <div style={{ display: 'grid', gap: 16 }}>
           <p>Available as a guest session, a 1-day workshop or a 2-day bootcamp. Every college receives participant certificates and a detailed event report with photos.</p>
           <a className="btn btn-line" href="#contact" style={{ justifySelf: 'start' }}>Book a college workshop <Arr /></a>
@@ -521,7 +539,7 @@ const App = () => (
       <Online />
       <Social />
       <Colleges />
-      <Gallery />
+      {SHOW_GALLERY && <Gallery />}
       <Contact />
     </main>
     <Footer />
