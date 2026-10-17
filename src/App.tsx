@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
+import reel10 from './assets/reels/reel-10.jpg';
+import yt16 from './assets/youtube/yt-16.jpg';
 
 // Captions for the numbered photo frames. Replace a frame with a real photo by
 // passing `src` to <Photo>.
@@ -21,8 +23,12 @@ const PHOTOS: Record<number, string> = {
 
 const LOGO = `${import.meta.env.BASE_URL}logo.jpg`;
 
+// Instagram reels shown in the feed tiles, keyed by photo number.
+const REELS: Record<number, { url: string; thumb?: string; title: string }> = {
+  10: { url: 'https://www.instagram.com/reel/DaFnivDvtaC/', thumb: reel10, title: 'The Trap: fake claims today, heavy penalties tomorrow' },
+};
+
 const INSTAGRAM = [
-  { handle: '@the_house_of_kanakkars', url: 'https://www.instagram.com/the_house_of_kanakkars' },
   { handle: '@the_hoks_academy', url: 'https://www.instagram.com/the_hoks_academy' },
 ];
 const YOUTUBE = { handle: '@TheHouseofKanakkars', url: 'https://www.youtube.com/@TheHouseofKanakkars' };
@@ -91,7 +97,7 @@ const Hero = () => (
     <div className="wrap hero-grid">
       <div>
         <div className="label">Business consulting · Founder programs · Networking</div>
-        <h1><span>Your business,</span><span><em>built the right way.</em></span></h1>
+        <h1><span>Build it right,</span><span><em>from day one.</em></span></h1>
         <p className="lede">HOKS helps aspiring entrepreneurs turn ideas into real businesses. We guide you from ideation to setup to fundraising, and connect you with the founders, mentors and investors who can help you grow.</p>
         <div className="ctas">
           <a className="btn btn-brass" href="#launchpad">Start your business <Arr /></a>
@@ -309,8 +315,17 @@ const Social = () => (
             <div><h4>Instagram</h4><span>{INSTAGRAM.map(i => i.handle).join(' · ')}</span></div>
           </div>
           <p>Reels and carousels on business ideas, startup lessons and founder stories.</p>
-          <div className="feed">
-            {[10, 11, 12, 13, 14, 15].map(n => <Photo key={n} n={n} />)}
+          {/* Only the reel for now. Restore the other tiles with [10, 11, 12, 13, 14, 15] and drop the "single" class. */}
+          <div className="feed single">
+            {[10 /* , 11, 12, 13, 14, 15 */].map(n => REELS[n] ? (
+              <a key={n} className={`photo reel${REELS[n].thumb ? ' has-thumb' : ''}`} href={REELS[n].url} target="_blank" rel="noopener" aria-label={`Watch on Instagram: ${REELS[n].title}`}>
+                {REELS[n].thumb && <img src={REELS[n].thumb} alt="" loading="lazy" />}
+                <div className="in">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M10 8.5v7l5.5-3.5z" /></svg>
+                  <b>Watch reel</b>
+                </div>
+              </a>
+            ) : <Photo key={n} n={n} />)}
           </div>
           <div className="sc-btns">
             {INSTAGRAM.map(i => (
@@ -324,8 +339,15 @@ const Social = () => (
             <div><h4>YouTube</h4><span>{YOUTUBE.handle}</span></div>
           </div>
           <p>Full-length business guides, event highlights and conversations with founders.</p>
-          <Photo n={16} />
-          <div className="yt-list"><Photo n={17} /><Photo n={18} /></div>
+          <a className="photo reel has-thumb" href={YOUTUBE.url} target="_blank" rel="noopener" aria-label={`Visit our YouTube channel ${YOUTUBE.handle}`}>
+            <img src={yt16} alt="" loading="lazy" />
+            <div className="in">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M10 8.5v7l5.5-3.5z" /></svg>
+              <b>Watch on YouTube</b>
+            </div>
+          </a>
+          {/* Only the channel thumbnail for now. Restore the smaller video tiles with:
+          <div className="yt-list"><Photo n={17} /><Photo n={18} /></div> */}
           <a className="btn btn-brass" href={YOUTUBE.url} target="_blank" rel="noopener" style={{ justifySelf: 'start' }}>Subscribe on YouTube <Arr>↗</Arr></a>
         </article>
       </div>

@@ -289,3 +289,20 @@ img{max-width:100%}
 .contacts > div > a{color:var(--brass-hi);font-size:.9rem}
 .contacts address{font-style:normal;font-weight:600;line-height:1.5}
 .foot ul a{overflow-wrap:anywhere}
+.reel{text-decoration:none;border-color:var(--brass-lo);transition:border-color .2s}
+.reel:hover{border-color:var(--brass-hi)}
+.feed .reel svg{width:30px;height:30px}
+.reel svg path{fill:var(--brass-hi);stroke:none}
+.reel.has-thumb::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,16,14,.05),rgba(8,16,14,.55))}
+.reel.has-thumb::after{display:none}
+.reel.has-thumb .in{position:relative;z-index:2;align-self:center}
+.reel.has-thumb svg circle{fill:rgba(8,16,14,.55)}
+.reel.has-thumb b{color:var(--ivory);text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.reel.has-thumb img{transition:transform .3s}
+.reel.has-thumb:hover img{transform:scale(1.05)}
+.feed.single{grid-template-columns:minmax(0,340px)}
+.feed.single .photo{--ar:4/5}
+.feed.single .reel svg{width:52px;height:52px}
+.feed.single .reel b{font-size:.8rem}
+.yt .reel svg{width:56px;height:56px}
+.yt .reel b{font-size:.8rem}
