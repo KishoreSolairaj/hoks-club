@@ -190,8 +190,7 @@ House of Kanakkars Private Limited
 -  Email: thehoks01@gmail.com
 -  Phone: +91 8807974452
 -  Website: [www.thehoks.com](#)
--  LinkedIn: [The HOKS Club](#)
--  Instagram: [@thehoksclub](#)
+
 
 ---
 
