@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import reel10 from './assets/reels/reel-10.jpg';
 import yt16 from './assets/youtube/yt-16.jpg';
+import { track } from './analytics';
 
 // Captions for the numbered photo frames. Replace a frame with a real photo by
 // passing `src` to <Photo>.
@@ -444,6 +445,7 @@ const Contact = () => {
       const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.message);
+      track('generate_lead', { interest: String(data.get('interest') ?? '') });
       form.reset();
       setMsg("Thank you! Your message has reached the HOKS team. We'll reply within two working days.");
     } catch {
