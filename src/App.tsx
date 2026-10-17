@@ -19,7 +19,7 @@ const PHOTOS: Record<number, string> = {
   20: 'Best group photo from an event', 21: 'Pitch night in progress', 22: 'Award or certificate moment', 23: 'Event stage or crowd, wide shot',
 };
 
-const LOGO = '/logo.jpg';
+const LOGO = `${import.meta.env.BASE_URL}logo.jpg`;
 
 const INSTAGRAM = [
   { handle: '@the_house_of_kanakkars', url: 'https://www.instagram.com/the_house_of_kanakkars' },
