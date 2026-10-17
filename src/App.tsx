@@ -1,430 +1,507 @@
-import React, { useState } from 'react';
-import { Menu, X, ChevronRight, Users, BookOpen, TrendingUp, Award, Mail, Phone, MapPin } from 'lucide-react';
+import { useState } from 'react';
+import type { CSSProperties, FormEvent } from 'react';
 
-// Type Definitions
-interface NavigationProps {
-  activeSection: string;
-  scrollToSection: (sectionId: string) => void;
+// Captions for the numbered photo frames. Replace a frame with a real photo by
+// passing `src` to <Photo>.
+const PHOTOS: Record<number, string> = {
+  1: 'Founders or entrepreneurs at a HOKS workshop',
+  2: 'You or a speaker presenting on stage',
+  3: 'Launchpad participants working on their business plans',
+  4: 'Networking event: people talking in small groups',
+  5: 'Founders Network members at a meetup',
+  6: 'Course cover: Idea to Business',
+  7: 'Course cover: Business Setup Explained',
+  8: 'Course cover: Marketing & Sales',
+  9: 'Course cover: Fundraising Fundamentals',
+  10: 'Instagram post', 11: 'Instagram post', 12: 'Instagram post', 13: 'Instagram post', 14: 'Instagram post', 15: 'Instagram post',
+  16: 'YouTube video thumbnail', 17: 'YouTube thumbnail', 18: 'YouTube thumbnail',
+  19: 'College workshop with students',
+  20: 'Best group photo from an event', 21: 'Pitch night in progress', 22: 'Award or certificate moment', 23: 'Event stage or crowd, wide shot',
+};
+
+const LOGO = '/logo.jpg';
+
+const INSTAGRAM = [
+  { handle: '@the_house_of_kanakkars', url: 'https://www.instagram.com/the_house_of_kanakkars' },
+  { handle: '@the_hoks_academy', url: 'https://www.instagram.com/the_hoks_academy' },
+];
+const YOUTUBE = { handle: '@TheHouseofKanakkars', url: 'https://www.youtube.com/@TheHouseofKanakkars' };
+
+const EMAIL = 'thehoks01@gmail.com';
+const PHONE = '+91 88079 74452';
+const PHONE_RAW = '918807974452';
+
+const ar = (ratio: string, extra: CSSProperties = {}) => ({ '--ar': ratio, ...extra }) as CSSProperties;
+
+interface PhotoProps {
+  n: number;
+  className?: string;
+  style?: CSSProperties;
+  src?: string;
 }
 
-interface HeroSectionProps {
-  scrollToSection: (sectionId: string) => void;
-}
-
-// Navigation Component
-const Navigation: React.FC<NavigationProps> = ({ activeSection, scrollToSection }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleScroll = (sectionId:any) => {
-    scrollToSection(sectionId);
-    setIsMenuOpen(false);
-  };
-
+const Photo = ({ n, className = '', style, src }: PhotoProps) => {
+  const cap = PHOTOS[n] ?? '';
   return (
-    <nav className="fixed w-full top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center font-bold text-xl">
-              H
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-              The HOKS Club
-            </span>
-          </div>
-
-          <div className="hidden md:flex space-x-8">
-            {['home', 'about', 'programs', 'consultation', 'blog', 'tools', 'contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => handleScroll(item)}
-                className={`capitalize hover:text-amber-400 transition-colors ${
-                  activeSection === item ? 'text-amber-400' : 'text-white'
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-
-          <button
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {isMenuOpen && (
-        <div className="md:hidden bg-slate-800 border-t border-slate-700">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {['home', 'about', 'programs', 'consultation', 'blog', 'tools', 'contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => handleScroll(item)}
-                className="block w-full text-left px-3 py-2 capitalize hover:bg-slate-700 rounded text-white"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+    <figure className={`photo ${className}`.trim()} style={style} aria-label={src ? undefined : `Photo ${n} placeholder: ${cap}`}>
+      {src ? (
+        <img src={src} alt={cap} />
+      ) : (
+        <div className="in">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z" /><circle cx="12" cy="13" r="3.6" /></svg>
+          <b>Photo {n}</b>
+          <small>{cap}</small>
         </div>
       )}
-    </nav>
+    </figure>
   );
 };
 
-// Hero Section Component
-const HeroSection: React.FC<HeroSectionProps> = ({ scrollToSection }) => {
-  return (
-    <section id="home" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center space-y-8">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-            <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400 bg-clip-text text-transparent">
-              Where Ambition Learns
-            </span>
-            <br />
-            <span className="text-white">the Language of Finance</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto">
-            From Students to Startups — Learn, Consult, and Grow with India's Premium Finance and Business Club
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-            <button
-              onClick={() => scrollToSection('programs')}
-              className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full font-semibold hover:shadow-lg hover:shadow-orange-500/50 transition-all flex items-center space-x-2 text-white"
-            >
-              <span>Explore Programs</span>
-              <ChevronRight size={20} />
-            </button>
-            <button
-              onClick={() => scrollToSection('consultation')}
-              className="px-8 py-4 border-2 border-amber-500 rounded-full font-semibold hover:bg-amber-500/10 transition-all text-white"
-            >
-              Book Consultation
-            </button>
-          </div>
-        </div>
+const Arr = ({ children = '→' }: { children?: string }) => <span className="arr">{children}</span>;
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
-          {[
-            { icon: Users, label: 'Expert Professionals', value: '10+' },
-            { icon: BookOpen, label: 'Programs Offered', value: '15+' },
-            { icon: TrendingUp, label: 'Success Stories', value: '100+' },
-            { icon: Award, label: 'Certifications', value: 'Industry-Ready' }
-          ].map((stat, idx) => (
-            <div key={idx} className="bg-slate-800/50 backdrop-blur rounded-xl p-6 text-center border border-slate-700 hover:border-amber-500/50 transition-all">
-              <stat.icon className="w-8 h-8 mx-auto mb-3 text-amber-400" />
-              <div className="text-2xl font-bold text-amber-400">{stat.value}</div>
-              <div className="text-sm text-slate-400 mt-1">{stat.label}</div>
-            </div>
+const NAV_LINKS = [
+  ['#launchpad', 'Start a Business'],
+  ['#setup', 'Business Setup'],
+  ['#events', 'Networking'],
+  ['#online', 'Online Classes'],
+  ['#colleges', 'For Colleges'],
+  ['#social', 'Follow Us'],
+];
+
+const Header = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="top">
+      <div className={`wrap nav${open ? ' open' : ''}`} id="nav">
+        <a className="logo" href="#top" aria-label="The HOKS Academy home"><img src={LOGO} alt="The HOKS Academy" /></a>
+        <ul id="menu">
+          {NAV_LINKS.map(([href, label]) => (
+            <li key={href}><a href={href} onClick={() => setOpen(false)}>{label}</a></li>
           ))}
-        </div>
+        </ul>
+        <a className="btn btn-brass" href="#contact">Talk to us <Arr /></a>
+        <button className="menu-btn" aria-expanded={open} aria-controls="menu" onClick={() => setOpen(o => !o)}>Menu</button>
       </div>
-    </section>
+    </header>
   );
 };
 
-// About Section Component
-const AboutSection: React.FC = () => {
-  return (
-    <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-800/30">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-12">
-          <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            About Us
-          </span>
-        </h2>
-        
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <p className="text-lg text-slate-300 leading-relaxed">
-              The HOKS Club brings together some of the finest minds in finance, law, and business to create a space where learning meets real-world application. Guided by Chartered Accountants, Company Secretaries, and experienced business consultants, the club bridges the gap between academic knowledge and professional excellence.
-            </p>
-            <p className="text-lg text-slate-300 leading-relaxed">
-              We design programs that turn curiosity into clarity and ambition into action. From students discovering the fundamentals of finance to entrepreneurs refining their business strategy, every initiative at The HOKS Club is built to inspire growth, confidence, and leadership.
-            </p>
-            <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl p-6">
-              <p className="text-amber-400 font-semibold italic">
-                "At our core, we believe financial intelligence is not just a skill but a mindset that can shape careers, companies, and the economy itself."
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-            <h3 className="text-2xl font-bold mb-6 text-amber-400">Why HOKS Club?</h3>
-            <div className="space-y-4">
-              {[
-                'Expert-Led Learning',
-                'Certificate Programs',
-                'Community Access',
-                'Real-World Projects',
-                'Professional Guidance'
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                  <span className="text-slate-200">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+const Hero = () => (
+  <section className="hero">
+    <div className="wrap hero-grid">
+      <div>
+        <div className="label">Business consulting · Founder programs · Networking</div>
+        <h1><span>Your business,</span><span><em>built the right way.</em></span></h1>
+        <p className="lede">HOKS helps aspiring entrepreneurs turn ideas into real businesses. We guide you from ideation to setup to fundraising, and connect you with the founders, mentors and investors who can help you grow.</p>
+        <div className="ctas">
+          <a className="btn btn-brass" href="#launchpad">Start your business <Arr /></a>
+          <a className="btn btn-line" href="#events">Join a networking event</a>
         </div>
-
-        <div className="mt-20">
-          <h3 className="text-3xl font-bold text-center mb-12 text-amber-400">Our Team</h3>
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              <div className="w-32 h-32 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-4xl font-bold flex-shrink-0">
-                CS
-              </div>
-              <div className="flex-1">
-                <h4 className="text-2xl font-bold text-amber-400 mb-2">CA. Sathishwaran</h4>
-                <p className="text-slate-400 mb-4">Chartered Accountant | Business Consultant | Social Impact Assessor | Finance Educator</p>
-                <p className="text-slate-300 leading-relaxed">
-                  CA. Sathishwaran is a practicing Chartered Accountant with extensive experience in finance, taxation, and business advisory. He holds a Bachelor's degree in Commerce and a Master's in Business Economics, complemented by professional certifications including FAFD (ICAI) and NISM's Social Impact Assessor.
-                </p>
-                <p className="text-slate-300 leading-relaxed mt-4">
-                  His approach combines analytical depth with practical insight, helping businesses build robust financial frameworks and achieve sustainable growth.
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="pillars">
+          <div><b>Start</b><span>From idea to launch</span></div>
+          <div><b>Set up</b><span>Registered and compliant</span></div>
+          <div><b>Connect</b><span>Founders, mentors, investors</span></div>
         </div>
       </div>
-    </section>
-  );
-};
+      <div className="hero-photos">
+        <Photo n={1} />
+        <Photo n={2} className="small" />
+      </div>
+    </div>
+  </section>
+);
 
-// Programs Section Component
-const ProgramsSection: React.FC = () => {
-  const financePrograms = [
-    { title: 'Finance for Students', desc: 'Learn the fundamentals of personal finance, taxation, and investment' },
-    { title: 'Finance to Industry-Ready Program', desc: 'Gain hands-on corporate finance skills and business communication confidence' },
-    { title: 'Corporate Training', desc: 'Custom learning modules for companies' },
-    { title: 'Company Accountant Training', desc: 'For aspiring accountants and finance professionals' }
-  ];
+const Services = () => (
+  <section className="alt" id="services">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">What we do</div>
+        <h2>Start it. Set it up. <em>Grow it with the right people.</em></h2>
+      </div>
+      <div className="svc-main">
+        <a href="#launchpad"><span className="num">i.</span><span className="label">For aspiring entrepreneurs</span><h4>HOKS Launchpad</h4><p>A step-by-step program that takes you from a raw idea to a launched, investor-ready business.</p><span className="go">Explore Launchpad →</span></a>
+        <a href="#setup"><span className="num">ii.</span><span className="label">For new businesses</span><h4>Business Setup Consultation</h4><p>The right structure, registrations and compliance, so your business stands on solid ground from day one.</p><span className="go">Book a consultation →</span></a>
+        <a href="#events"><span className="num">iii.</span><span className="label">For founders and professionals</span><h4>HOKS Connect</h4><p>Meetups, pitch nights and investor evenings that put you in the right rooms with the right people.</p><span className="go">See upcoming events →</span></a>
+      </div>
+      <div className="svc-more">
+        <a href="#online"><div><b>Online Classes</b><span>Learn business at your own pace</span></div><i>→</i></a>
+        <a href="#social"><div><b>Instagram &amp; YouTube</b><span>Free business lessons every week</span></div><i>→</i></a>
+        <a href="#colleges"><div><b>College Workshops</b><span>Career, business and money training</span></div><i>→</i></a>
+      </div>
+    </div>
+  </section>
+);
 
-  const entrepreneurshipPrograms = [
-    { title: 'Business Masterclass', desc: 'For business students and startup aspirants' },
-    { title: 'Startup Bootcamps', desc: 'Intensive sessions on structuring and scaling your business' },
-    { title: 'Workshops & Financial Intelligence Labs', desc: 'Action-packed sessions on finance' },
-    { title: 'Accelerator Weekends & Strategy Retreats', desc: 'High-impact collaborative programs' }
-  ];
+const STAGES = [
+  ['Ideation', 'Find a problem worth solving and shape it into a clear, focused business idea.'],
+  ['Validation', 'Talk to real customers, test demand and build the simplest version of your product.'],
+  ['Business planning', 'Work out your business model, pricing, costs and the numbers that matter.'],
+  ['Setup', 'Choose the right structure, register your business and put compliance in place.'],
+  ['Launch and marketing', 'Build your brand, sell on social media and win your first customers.'],
+  ['Fundraising', 'Understand grants, angel investors and venture capital, and build an investor-ready pitch deck.'],
+];
 
-  return (
-    <section id="programs" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-6">
-          <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            Our Programs
-          </span>
-        </h2>
-        <p className="text-center text-slate-300 text-lg mb-12 max-w-3xl mx-auto">
-          Transformative learning experiences that bridge the gap between academic knowledge and real-world application
-        </p>
-
-        <div className="space-y-8">
-          <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 border border-slate-700">
-            <h3 className="text-2xl font-bold text-amber-400 mb-6">Finance & Industry-Ready Programs</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              {financePrograms.map((program, idx) => (
-                <div key={idx} className="bg-slate-900 rounded-xl p-6 hover:border hover:border-amber-500/50 transition-all border border-transparent">
-                  <h4 className="text-xl font-semibold text-white mb-2">{program.title}</h4>
-                  <p className="text-slate-400">{program.desc}</p>
-                </div>
-              ))}
-            </div>
+const Launchpad = () => (
+  <section id="launchpad">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">For aspiring entrepreneurs</div>
+        <h2>HOKS Launchpad: <em>from idea to investment.</em></h2>
+        <p className="lede">Most new businesses struggle because founders do the right things in the wrong order. Launchpad walks you through every stage with expert guidance, so you build a business that is ready for customers and investors.</p>
+      </div>
+      <div className="lp">
+        <div className="lp-side">
+          <Photo n={3} />
+          <div className="facts">
+            <div><span>Format</span><b>Weekend workshop or 6-week cohort</b></div>
+            <div><span>Mode</span><b>In person and online</b></div>
+            <div><span>Next batch</span><b className="ph">DD Month 2027</b></div>
+            <div><span>Fee</span><b className="ph">₹ ____</b></div>
           </div>
+          <a className="btn btn-brass" href="#contact" style={{ justifySelf: 'start' }}>Reserve your seat <Arr /></a>
+        </div>
+        <ol className="stages">
+          {STAGES.map(([title, desc], i) => (
+            <li key={title}><span className="stop">{String(i + 1).padStart(2, '0')}</span><div><h4>{title}</h4><p>{desc}</p></div></li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+);
 
-          <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 border border-slate-700">
-            <h3 className="text-2xl font-bold text-amber-400 mb-6">Entrepreneurship & Business Excellence</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              {entrepreneurshipPrograms.map((program, idx) => (
-                <div key={idx} className="bg-slate-900 rounded-xl p-6 hover:border hover:border-amber-500/50 transition-all border border-transparent">
-                  <h4 className="text-xl font-semibold text-white mb-2">{program.title}</h4>
-                  <p className="text-slate-400">{program.desc}</p>
-                </div>
-              ))}
-            </div>
+const SETUP_ITEMS = [
+  ['Choosing your structure', 'Proprietorship, partnership, LLP, OPC or private limited: what fits your plans.'],
+  ['Company and LLP registration', 'Guidance through incorporation, PAN, TAN and documentation.'],
+  ['GST registration', 'When you need it, how to register and how to file correctly.'],
+  ['MSME (Udyam) registration', 'Unlock government schemes, subsidies and easier credit.'],
+  ['Startup India recognition', 'DPIIT recognition and the tax and funding benefits it brings.'],
+  ['Trademark for your brand', 'Protect your business name and logo before someone else claims them.'],
+  ["Founders' agreement", 'Equity split, roles and exit terms agreed in writing from the start.'],
+  ['Banking and accounts', 'Current account, bookkeeping and accounting setup that scales.'],
+  ['Compliance calendar', 'Every filing and deadline for the year, in one simple plan.'],
+];
+
+const SETUP_STEPS = [
+  ['Free discovery call', 'Tell us about your business and your plans.'],
+  ['Your setup plan', 'A clear recommendation on structure, registrations and costs.'],
+  ['Registration support', 'We guide every step, working with trusted CAs and legal partners.'],
+  ['Ongoing guidance', 'Stay on top of compliance as your business grows.'],
+];
+
+const Setup = () => (
+  <section className="alt" id="setup">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">Business setup consultation</div>
+        <h2>Set up your business <em>correctly from day one.</em></h2>
+        <p className="lede">Wrong decisions at the start cost time, money and stress later. Our consultants help you choose the right structure, complete the right registrations and stay compliant as you grow.</p>
+      </div>
+      <div className="setup-grid">
+        {SETUP_ITEMS.map(([title, desc]) => <div key={title}><h4>{title}</h4><p>{desc}</p></div>)}
+      </div>
+      <ol className="how">
+        {SETUP_STEPS.map(([title, desc], i) => (
+          <li key={title}><span className="stop">{String(i + 1).padStart(2, '0')}</span><h4>{title}</h4><p>{desc}</p></li>
+        ))}
+      </ol>
+      <div style={{ marginTop: 44 }}><a className="btn btn-brass" href="#contact">Book a free discovery call <Arr /></a></div>
+    </div>
+  </section>
+);
+
+const Events = () => (
+  <section id="events">
+    <div className="wrap">
+      <div className="ev">
+        <div>
+          <div className="head" style={{ marginBottom: 0 }}>
+            <div className="label">Networking events</div>
+            <h2>HOKS Connect: <em>your network is your net worth.</em></h2>
+            <p className="lede">Great opportunities come from the right rooms. HOKS Connect brings founders, aspiring entrepreneurs, mentors, professionals and investors together, in person and with purpose.</p>
+          </div>
+          <div className="ev-types">
+            <div><h4>Founder Meetups</h4><p>Share progress, problems and wins with founders at your stage.</p></div>
+            <div><h4>Investor Evenings</h4><p>Pitch to angel investors and learn what they look for.</p></div>
+            <div><h4>Pitch Nights</h4><p>Present your idea, get honest feedback and win recognition.</p></div>
+            <div><h4>Business Mixers</h4><p>Meet partners, suppliers, clients and collaborators.</p></div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-};
-
-// Consultation Section Component
-const ConsultationSection = () => {
-  const services = [
-    'Business Structure & Setup',
-    'Tax Planning & Strategy',
-    'Financial Modeling',
-    'Legal Guidance',
-    'Compliance Management',
-    'Funding & Investment'
-  ];
-
-  return (
-    <section id="consultation" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-800/30">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-12">
-          <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            Consultation & Mentorship
-          </span>
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-            <h3 className="text-2xl font-bold text-amber-400 mb-4">Expert Guidance</h3>
-            <p className="text-slate-300 mb-6">
-              Our team includes Chartered Accountants, Company Secretaries, and Bankers — professionals who bring deep practical knowledge to every conversation.
-            </p>
-            <p className="text-slate-300 mb-6">
-              Book a personal consultation to discuss business setup, taxation, compliance, or funding. All consultations are by appointment only.
-            </p>
-            <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full font-semibold hover:shadow-lg hover:shadow-orange-500/50 transition-all text-white">
-              Schedule Consultation
-            </button>
-          </div>
-
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-            <h3 className="text-2xl font-bold text-amber-400 mb-4">Consultation Services</h3>
-            <div className="space-y-4">
-              {services.map((service, idx) => (
-                <div key={idx} className="flex items-center space-x-3 text-slate-300">
-                  <ChevronRight className="text-amber-400 flex-shrink-0" size={20} />
-                  <span>{service}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div>
+          <Photo n={4} />
+          <ul className="upcoming" aria-label="Upcoming events">
+            {['Founder Meetup', 'Investor Evening', 'Pitch Night'].map(title => (
+              <li key={title}>
+                <div className="date"><b className="ph">__</b><span className="ph">Mon</span></div>
+                <div><h4>{title}</h4><p className="ph">City · Venue</p></div>
+                <a href="#contact">Register →</a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-    </section>
-  );
-};
-
-// Blog Section Component
-const BlogSection = () => {
-  return (
-    <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-12">
-          <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            Blog
-          </span>
-        </h2>
-        <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-12 border border-slate-700 text-center">
-          <p className="text-slate-400 text-lg">📝 Content needs to be added here. Stay tuned for insights on finance, business, and entrepreneurship.</p>
+      <div className="join">
+        <div>
+          <div className="label">Membership</div>
+          <h3>Join the HOKS Founders Network</h3>
+          <p style={{ color: 'var(--muted)' }}>A year-round community for people building businesses. Stay connected between events and get help when you need it.</p>
+          <ul>
+            <li>Priority entry to every HOKS Connect event</li>
+            <li>Private founders' community group</li>
+            <li>Monthly mentor sessions and expert AMAs</li>
+            <li>Introductions to investors and service partners</li>
+            <li>Member discounts on Launchpad and setup services</li>
+          </ul>
+        </div>
+        <div>
+          <div className="price"><span className="ph">₹ ____</span> <small>/ year</small></div>
+          <p style={{ color: 'var(--muted)' }}>Open to founders, aspiring entrepreneurs and professionals who want to build.</p>
+          <a className="btn btn-brass" href="#contact" style={{ justifySelf: 'start' }}>Become a member <Arr /></a>
+          <Photo n={5} style={ar('16/10', { marginTop: 8 })} />
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
-// Tools Section Component
-const ToolsSection = () => {
-  return (
-    <section id="tools" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-800/30">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-12">
-          <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            Tools
-          </span>
-        </h2>
-        <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-12 border border-slate-700 text-center">
-          <p className="text-slate-400 text-lg">🛠️ Content needs to be added here. Financial tools and calculators coming soon.</p>
+const COURSES = [
+  [6, 'Idea to Business', 'Find, test and shape an idea into a business people will pay for.'],
+  [7, 'Business Setup Explained', 'Structures, registrations and compliance in plain language.'],
+  [8, 'Marketing & Sales', 'Win customers with social media, branding and simple sales systems.'],
+  [9, 'Fundraising Fundamentals', 'Grants, angels and VCs, plus how to build a pitch deck that gets read.'],
+] as const;
+
+const Online = () => (
+  <section className="alt" id="online">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">Online classes</div>
+        <h2>Learn business <em>anytime, anywhere.</em></h2>
+        <p className="lede">Self-paced video courses with worksheets, templates and live doubt-clearing sessions. Built for busy founders and future entrepreneurs.</p>
+      </div>
+      <div className="courses">
+        {COURSES.map(([n, title, desc]) => (
+          <article className="course" key={title}>
+            <Photo n={n} />
+            <h4>{title}</h4>
+            <p>{desc}</p>
+            <div className="meta"><span>Self-paced</span><span className="ph">₹ ____</span></div>
+          </article>
+        ))}
+      </div>
+      <div style={{ marginTop: 44 }}><a className="btn btn-line" href="#contact">Enrol in a course <Arr /></a></div>
+    </div>
+  </section>
+);
+
+const Social = () => (
+  <section id="social">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">Follow HOKS</div>
+        <h2>Free business lessons <em>every week.</em></h2>
+        <p className="lede">Short, practical videos on starting, running and growing a business. Learn something useful in a minute a day.</p>
+      </div>
+      <div className="social">
+        <article className="sc">
+          <div className="sc-top">
+            <div className="sc-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".8" /></svg></div>
+            <div><h4>Instagram</h4><span>{INSTAGRAM.map(i => i.handle).join(' · ')}</span></div>
+          </div>
+          <p>Reels and carousels on business ideas, startup lessons and founder stories.</p>
+          <div className="feed">
+            {[10, 11, 12, 13, 14, 15].map(n => <Photo key={n} n={n} />)}
+          </div>
+          <div className="sc-btns">
+            {INSTAGRAM.map(i => (
+              <a key={i.url} className="btn btn-brass" href={i.url} target="_blank" rel="noopener">Follow {i.handle} <Arr>↗</Arr></a>
+            ))}
+          </div>
+        </article>
+        <article className="sc yt">
+          <div className="sc-top">
+            <div className="sc-ic"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="4" /><path d="M10 9.2v5.6l4.8-2.8z" /></svg></div>
+            <div><h4>YouTube</h4><span>{YOUTUBE.handle}</span></div>
+          </div>
+          <p>Full-length business guides, event highlights and conversations with founders.</p>
+          <Photo n={16} />
+          <div className="yt-list"><Photo n={17} /><Photo n={18} /></div>
+          <a className="btn btn-brass" href={YOUTUBE.url} target="_blank" rel="noopener" style={{ justifySelf: 'start' }}>Subscribe on YouTube <Arr>↗</Arr></a>
+        </article>
+      </div>
+    </div>
+  </section>
+);
+
+const Colleges = () => (
+  <section className="alt" id="colleges">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">For colleges</div>
+        <h2>Campus workshops that <em>prepare students for what's next.</em></h2>
+        <p className="lede">We also bring HOKS training to colleges and universities through three focused programs.</p>
+      </div>
+      <div className="cw">
+        <article><div className="label">Industry-ready training</div><h4>Career Edge</h4><div className="tag">From classroom to corporate, with confidence.</div>
+          <ul><li>Communication and presentations</li><li>Resume, LinkedIn and interviews</li><li>Workplace skills and AI tools</li></ul></article>
+        <article><div className="label">Entrepreneurial skills</div><h4>Founder's Mindset</h4><div className="tag">Think like a founder, whatever career you choose.</div>
+          <ul><li>Spotting opportunities</li><li>Idea validation and business models</li><li>Live pitch round</li></ul></article>
+        <article><div className="label">Money mind training</div><h4>Money Mind</h4><div className="tag">Master your money before it masters you.</div>
+          <ul><li>Budgeting and saving</li><li>Investing basics: SIPs, funds, stocks</li><li>Credit, tax basics and avoiding scams</li></ul></article>
+      </div>
+      <div className="cw-foot">
+        <Photo n={19} style={ar('16/9')} />
+        <div style={{ display: 'grid', gap: 16 }}>
+          <p>Available as a guest session, a 1-day workshop or a 2-day bootcamp. Every college receives participant certificates and a detailed event report with photos.</p>
+          <a className="btn btn-line" href="#contact" style={{ justifySelf: 'start' }}>Book a college workshop <Arr /></a>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
-// Contact Section Component
-const ContactSection = () => {
-  return (
-    <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl sm:text-5xl font-bold text-center mb-6">
-          <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            Get In Touch
-          </span>
-        </h2>
-        <p className="text-center text-slate-300 text-lg mb-12">
-          Whether you're a student ready to learn, an entrepreneur ready to start, or a company ready to train your team — we're here to help you grow.
-        </p>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 text-center hover:border-amber-500/50 transition-all">
-            <Phone className="w-12 h-12 mx-auto mb-4 text-amber-400" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Phone</h3>
-            <a href="tel:8807974452" className="text-slate-300 hover:text-amber-400 transition-colors">8807974452</a>
-          </div>
-
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 text-center hover:border-amber-500/50 transition-all">
-            <Mail className="w-12 h-12 mx-auto mb-4 text-amber-400" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Email</h3>
-            <a href="mailto:thehoks01@gmail.com" className="text-slate-300 hover:text-amber-400 break-all transition-colors">thehoks01@gmail.com</a>
-          </div>
-
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 text-center hover:border-amber-500/50 transition-all">
-            <MapPin className="w-12 h-12 mx-auto mb-4 text-amber-400" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Office</h3>
-            <p className="text-slate-400 text-sm">📍 Address details to be added</p>
-          </div>
-        </div>
+const Gallery = () => (
+  <section id="gallery">
+    <div className="wrap">
+      <div className="head">
+        <div className="label">Moments from HOKS</div>
+        <h2>Inside our <em>programs and events.</em></h2>
       </div>
-    </section>
-  );
-};
-
-// Footer Component
-const Footer = () => {
-  return (
-    <footer className="bg-slate-900 border-t border-slate-700 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto text-center">
-        <div className="flex items-center justify-center space-x-2 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center font-bold text-xl">
-            H
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
-            The HOKS Club
-          </span>
-        </div>
-        <p className="text-slate-400 mb-4">House of Kanakkars Private Limited</p>
-        <p className="text-slate-500 text-sm">© 2024 The HOKS Club. All rights reserved.</p>
+      <div className="gallery">
+        <Photo n={20} className="g1" />
+        <Photo n={21} />
+        <Photo n={22} />
+        <Photo n={23} className="g4" />
       </div>
-    </footer>
-  );
-};
+      <div className="nums" style={{ marginTop: 56 }}>
+        <div><b className="ph">__+</b><span>Businesses guided</span></div>
+        <div><b className="ph">__+</b><span>Founders in our network</span></div>
+        <div><b className="ph">__+</b><span>Events hosted</span></div>
+        <div><b className="ph">__K</b><span>Followers</span></div>
+      </div>
+    </div>
+  </section>
+);
 
-// Main App Component
-const HoksClubWebsite = () => {
-  const [activeSection, setActiveSection] = useState('home');
+const INTERESTS = [
+  'HOKS Launchpad: start my business',
+  'Business setup consultation',
+  'HOKS Connect events',
+  'Founders Network membership',
+  'Online classes',
+  'College workshop',
+  'Something else',
+];
 
-  const scrollToSection = (sectionId:any) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+// Web3Forms delivers submissions to the inbox registered with this key. The key
+// is meant to be public: it can only send mail to that inbox.
+const WEB3FORMS_KEY = '073e49ad-14b8-4ab1-944c-14ea01b6464f';
+
+const Contact = () => {
+  const [msg, setMsg] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+    if (!name || !/^\S+@\S+\.\S+$/.test(email)) {
+      setMsg('Please add your name and a valid email address so we can reply.');
+      return;
+    }
+
+    data.append('access_key', WEB3FORMS_KEY);
+    data.append('subject', `New enquiry from ${name}: ${data.get('interest')}`);
+    data.append('from_name', 'HOKS Website');
+
+    setSending(true);
+    setMsg(null);
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message);
+      form.reset();
+      setMsg("Thank you! Your message has reached the HOKS team. We'll reply within two working days.");
+    } catch {
+      setMsg(`Sorry, your message could not be sent. Please try again, or email us at ${EMAIL}.`);
+    } finally {
+      setSending(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-      <Navigation activeSection={activeSection} scrollToSection={scrollToSection} />
-      <HeroSection scrollToSection={scrollToSection} />
-      <AboutSection />
-      <ProgramsSection />
-      <ConsultationSection />
-      <BlogSection />
-      <ToolsSection />
-      <ContactSection />
-      <Footer />
-    </div>
+    <section className="contact" id="contact">
+      <div className="wrap c-grid">
+        <div>
+          <div className="label">Get in touch</div>
+          <h2 style={{ margin: '18px 0 20px' }}>Let's build <em>your business.</em></h2>
+          <p className="lede">Tell us where you are and what you need. We reply within two working days.</p>
+          <div className="contacts">
+            <div><span>Email</span><b><a href={`mailto:${EMAIL}`}>{EMAIL}</a></b></div>
+            <div><span>Phone / WhatsApp</span><b><a href={`tel:+${PHONE_RAW}`}>{PHONE}</a></b> · <a href={`https://wa.me/${PHONE_RAW}`} target="_blank" rel="noopener">WhatsApp ↗</a></div>
+            <div><span>Office</span><address>House of Kanakkar's Private Limited<br />No 3/1028-2, SR Naidu Nagar, VC Puram,<br />Venkatachalapuram, Sattur,<br />Virudhunagar 626203, Tamil Nadu</address></div>
+          </div>
+        </div>
+        <form noValidate onSubmit={onSubmit}>
+          <label className="fld">Full name<input name="name" required autoComplete="name" /></label>
+          <label className="fld">Email<input name="email" type="email" required autoComplete="email" /></label>
+          <label className="fld">Phone<input name="phone" type="tel" autoComplete="tel" /></label>
+          <label className="fld">Business or organisation<input name="org" autoComplete="organization" /></label>
+          <label className="fld full">I'm interested in
+            <select name="interest">
+              {INTERESTS.map(i => <option key={i}>{i}</option>)}
+            </select>
+          </label>
+          <label className="fld full">Message<textarea name="message" placeholder="Tell us about your idea or business" /></label>
+          {/* Honeypot: hidden from people, filled by spam bots, rejected by Web3Forms. */}
+          <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
+          <div className="full">
+            <button className="btn btn-brass" type="submit" disabled={sending}>
+              {sending ? 'Sending…' : <>Send message <Arr /></>}
+            </button>
+          </div>
+          {msg && <div className="msg" role="status">{msg}</div>}
+        </form>
+      </div>
+    </section>
   );
 };
 
-export default HoksClubWebsite;
+const Footer = () => (
+  <footer>
+    <div className="wrap foot">
+      <div><a className="logo foot-logo" href="#top"><img src={LOGO} alt="The HOKS Academy" /></a><p>Helping India's next entrepreneurs start right, set up right and grow with the right people.</p></div>
+      <div><h5>Services</h5><ul><li><a href="#launchpad">HOKS Launchpad</a></li><li><a href="#setup">Business Setup</a></li><li><a href="#events">HOKS Connect</a></li><li><a href="#online">Online Classes</a></li><li><a href="#colleges">College Workshops</a></li></ul></div>
+      <div><h5>Follow</h5><ul>
+        {INSTAGRAM.map(i => <li key={i.url}><a href={i.url} target="_blank" rel="noopener">Instagram {i.handle} ↗</a></li>)}
+        <li><a href={YOUTUBE.url} target="_blank" rel="noopener">YouTube ↗</a></li>
+        <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+        <li><a href={`tel:+${PHONE_RAW}`}>{PHONE}</a></li>
+      </ul></div>
+    </div>
+    <div className="wrap copy">© 2026 House of Kanakkar's Private Limited · Sattur, Virudhunagar, Tamil Nadu</div>
+  </footer>
+);
+
+const App = () => (
+  <>
+    <Header />
+    <main id="top">
+      <Hero />
+      <Services />
+      <Launchpad />
+      <Setup />
+      <Events />
+      <Online />
+      <Social />
+      <Colleges />
+      <Gallery />
+      <Contact />
+    </main>
+    <Footer />
+  </>
+);
+
+export default App;
